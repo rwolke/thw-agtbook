@@ -1,0 +1,51 @@
+diff --git a/makefont/makefont.php b/makefont/makefont.php
+index 4bbd6d7..bbc6b22 100644
+--- a/makefont/makefont.php
++++ b/makefont/makefont.php
+@@ -101,6 +101,7 @@ function GetInfoFromTrueType($file, $embed, $subset, $map)
+ 	$info['UnderlinePosition'] = round($k*$ttf->underlinePosition);
+ 	$info['FontBBox'] = array(round($k*$ttf->xMin), round($k*$ttf->yMin), round($k*$ttf->xMax), round($k*$ttf->yMax));
+ 	$info['CapHeight'] = round($k*$ttf->capHeight);
++	$info['xHeight'] = round($k*$ttf->xHeight);
+ 	$info['MissingWidth'] = round($k*$ttf->glyphs[0]['w']);
+ 	$widths = array_fill(0, 256, $info['MissingWidth']);
+ 	foreach($map as $c=>$v)
+@@ -185,6 +186,8 @@ function GetInfoFromType1($file, $embed, $map)
+ 			$info['FontBBox'] = array((int)$e[1], (int)$e[2], (int)$e[3], (int)$e[4]);
+ 		elseif($entry=='CapHeight')
+ 			$info['CapHeight'] = (int)$e[1];
++		elseif($entry=='xHeight')
++			$info['xHeight'] = (int)$e[1];
+ 		elseif($entry=='StdVW')
+ 			$info['StdVW'] = (int)$e[1];
+ 	}
+@@ -226,6 +229,8 @@ function MakeFontDescriptor($info)
+ 		$fd .= ",'CapHeight'=>".$info['CapHeight'];
+ 	else
+ 		$fd .= ",'CapHeight'=>".$info['Ascender'];
++	if(!empty($info['xHeight']))
++		$fd .= ",'xHeight'=>".$info['xHeight'];
+ 	// Flags
+ 	$flags = 0;
+ 	if($info['IsFixedPitch'])
+diff --git a/makefont/ttfparser.php b/makefont/ttfparser.php
+index 56c46a4..4c48338 100644
+--- a/makefont/ttfparser.php
++++ b/makefont/ttfparser.php
+@@ -303,11 +303,15 @@ class TTFParser
+ 		$this->typoDescender = $this->ReadShort();
+ 		if($version>=2)
+ 		{
+-			$this->Skip(3*2+2*4+2);
++			$this->Skip(3*2+2*4);
++			$this->xHeight = $this->ReadShort();
+ 			$this->capHeight = $this->ReadShort();
+ 		}
+ 		else
++		{
++			$this->xHeight = 0;
+ 			$this->capHeight = 0;
++		}
+ 	}
+ 
+ 	function ParsePost()

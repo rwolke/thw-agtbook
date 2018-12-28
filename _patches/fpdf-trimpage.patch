@@ -1,0 +1,20 @@
+diff --git a/fpdf.php b/fpdf.php
+index e7fbb45..abb1bea 100644
+--- a/fpdf.php
++++ b/fpdf.php
+@@ -1499,8 +1499,13 @@ protected function _putpage($n)
+ 	$this->_newobj();
+ 	$this->_put('<</Type /Page');
+ 	$this->_put('/Parent 1 0 R');
+-	if(isset($this->PageInfo[$n]['size']))
+-		$this->_put(sprintf('/MediaBox [0 0 %.2F %.2F]',$this->PageInfo[$n]['size'][0],$this->PageInfo[$n]['size'][1]));
++	if(!isset($this->PageInfo[$n]['box']))
++		$this->PageInfo[$n]['box'] = [];
++	if(isset($this->PageInfo[$n]['size']) && !isset($this->PageInfo[$n]['box']['MediaBox']))
++		$this->PageInfo[$n]['box']['MediaBox'] = [$this->PageInfo[$n]['size'][0],$this->PageInfo[$n]['size'][1]];
++	foreach($this->PageInfo[$n]['box'] AS $b => $bb){
++		$this->_put(sprintf('/'.$b.' [%.2F %.2F %.2F %.2F]', $bb[2], $bb[3], $bb[0], $bb[1]));
++	}
+ 	if(isset($this->PageInfo[$n]['rotation']))
+ 		$this->_put('/Rotate '.$this->PageInfo[$n]['rotation']);
+ 	$this->_put('/Resources 2 0 R');
