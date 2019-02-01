@@ -28,20 +28,25 @@
 		$dw = 4;
 		$dy = 6.5;
 		$cols = 2;
-		$w0 = $pdf->getPos(W) - ($cols+1)*$dw - 10;
-		$x0 += 5;
+		$w0 = $pdf->getPos(W) - ($cols+1)*$dw - 4;
+		$x0 += 2;
 		$w = $w0 / $cols;
-		for($i = 0; $i < 10; $i++) {
+		foreach($inhalte AS $i => $in) {
 			$x = $x0 + ($i % $cols) * ($w + $dw) + $dw;
 			$y = $y0 + floor($i / $cols) * $dy;
 		
 			$pdf->Rect($x+1, $y-2, 2, 2);
-			$pdf->useFont(isset($inhalte[$i]) ? 'text' : 'dots');
-			if(isset($inhalte[$i]))
-				$pdf->putText($x+6, $y, $inhalte[$i]);
+			$pdf->useFont(isset($in) ? 'text' : 'dots');
+			if($in)
+				$pdf->putText($x+6, $y, $in);
 			else
 				$pdf->putText($x+6, $y+.5, str_repeat('.', ($w-6) / $dotW));
 		}
+		for($i = 1; $i < $cols; $i++)
+			$pdf->Line(
+				$x0 + $dw * ($i+.5) + $w * $i, $y0 - $dy * .5,
+				$x0 + $dw * ($i+.5) + $w * $i, $y0 + ceil(count($inhalte) / $cols) * $dy - $dy * .8
+			);
 	
 		$x0 = $pdf->getPos(X);
 		$y0 = $yBase + 68;
@@ -99,10 +104,12 @@
 				'Filtergerät: Gewöhnung',
 				'Behältergerät: Gewöhnung',
 				'Behältergerät: Orientierung',
-				'Behältergerät: Körperl. Belastung',
-				'Behältergerät: Psych. Belastung',
+				'Behältergerät: Körperliche Belastung',
+				'Behältergerät: Psychische Belastung',
 				'Behältergerät: Einsatznahe Tätigkeit',
 				'Behältergerät: Notfalltraining',
+				null,
+				null,
 				null
 			]
 		);
@@ -119,6 +126,7 @@
 				'Einsatznahe Tätigkeit',
 				'Not-Dekon', 
 				'Sicheres Ablegen der Schutzbekleidung',
+				null,
 				null
 			]
 		);

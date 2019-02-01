@@ -28,7 +28,7 @@
 			$y += 5*$dy;
 		}
 		
-		$w = calendarTable($pdf, $y0, $years);
+		$w = calendarTable($pdf, $y0, $years, true);
 		
 		function putX($pdf, $y0, $dyh, $dy, $f, $w,$r,$y,$m,$l=12) {
 			$pdf->useFont($f);

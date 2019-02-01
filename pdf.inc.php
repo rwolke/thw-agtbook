@@ -492,8 +492,13 @@
 			);
 			
 			imagejpeg($j, 'rgb-'.$no.'.jpg', JPEG_QUALITY);
-			exec('convert rgb-'.$no.'.jpg -colorspace cmyk cmyk-'.$no.'.jpg');
-			$this->Image('cmyk-'.$no.'.jpg', $x, $y, ($t=='W'?$s:0), ($t!='W'?$s:0));
+			exec('convert rgb-'.$no.'.jpg -colorspace cmyk cmyk-'.$no.'.jpg', $out, $ret);
+			if(!$ret)
+				$this->Image('cmyk-'.$no.'.jpg', $x, $y, ($t=='W'?$s:0), ($t!='W'?$s:0));
+			else {
+				echo 'Bild "'.$img.'" konnte nicht nach CMYK konvertiert werden!'."\n";
+				$this->Image('rgb-'.$no.'.jpg', $x, $y, ($t=='W'?$s:0), ($t!='W'?$s:0));
+			}
 			
 			if($t == 'H')
 				return $s * $sw/$sh; 

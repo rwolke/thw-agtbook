@@ -58,7 +58,7 @@
 		
 		$text = 'Diese Eintragung bestätigt, dass ein ärztlicher Befund mit der genannten Gültigkeit und Anmerkungen bei der Verantwortlichen Person Atemschutz vorliegt.';
 		$pdf->putMultiText(
-			0, 21.5, $text
+			0, $y0 + 7.5, $text
 		);
 
 		///

@@ -18,7 +18,7 @@
 				$list[$k] = $$k;
 			return $list;
 		}
-		else if($export !== null)
+		elseif($export === null)
 			foreach($years AS $year) {
 				$pdf->SetFillColor(100 - 4*3);
 				$pdf->Rect($xt0, $y + 0*$dy, $w, $dy, 'F');

@@ -4,9 +4,32 @@
 	define('JPEG_QUALITY', 95);
 	define('BLEED', 3);
 	
-	define('LOGO_ZEILE_1', 'Ortsverband Rostock');
-//	define('LOGO_ZEILE_2', 'Regionalbereich Schwerin');
+	// Erste Zeile unter THW-Logo
+	define('LOGO_ZEILE_1', 'Ortsverband Musterstadt');
+	// (optionale) zweite Zeile unter THW-Logo
+	define('LOGO_ZEILE_2', 'Regionalbereich Musterregion');
 
+	// define('COVER_IMAGE_CREDIT', 'THW Ortsverband Musterstadt');
+	$titelbild = function($pdf) {
+		/* 
+			In diesem Beispiel wird von dem Bid IMG_2788 ein vertikaler Streifen
+			von 24 % der Bildbreite ausgeschnitten. Dieser beginnt bei 41% der 
+			Bildbreite. 
+		*/
+		$pdf->Img(
+			// relativer Dateipfad
+			'cover/IMG_2788.jpg', 
+			// Positionierung auf Blatt (NICHT ÄNDERN!)
+			0, 0, 
+			// Größe Bild (NICHT ÄNDERN!)
+			'H', PAGE_HEIGHT+2*BLEED,
+			// Prozent der Bildgröße (Breite und Höhe) die gedruckt werden sollen.
+			24, 100,
+			// Offset (x, y) wo mit Druck begonnen werden soll in Prozent der Bildbreite
+			41, 0
+		);
+	};
+	
 	require('pdf.inc.php');
 	
 	if(isset($argv[2]) && intval($argv[2]) && intval($argv[2]) > 2000)
@@ -14,12 +37,13 @@
 	else
 		define('STARTYEAR', 2016);
 	
+
 	$pdf = new PDF();
-	$pdf->SetAuthor('Robert Wolke <r.wolke+agtpass@thw-rostock.de>', true);
+	$pdf->SetAuthor('Robert Wolke <agtpass@thw-rostock.de>', true);
 	$pdf->SetTitle('AGT/CBRN-Pass Version 1.1', true);
 	
 	$teile = [
-		['cover/cover.php'],
+		['cover/cover.php', ['coverimage' => $titelbild]],
 		['cover/coverinside.php'],
 		['parts/title.php'],
 		['parts/verantwPerson.php'],

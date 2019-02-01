@@ -12,7 +12,7 @@
 		$text = 'Gemäß THW DV 7 ist für jede Einsatzkraft unter Atemschutz ein Nachweis zu führen. Hierfür ist der Dienststellenleiter verantwortlich, der diese Funktion an eine Verantwortliche Person Atemschutz delegieren kann. ';
 		$text.= 'In folgender Tabelle wird die Verantwortliche Person Atemschutz vermerkt, welche für die Pflege dieses Atemschutznachweises verantwortlich ist.';
 		$pdf->putMultiText(
-			0, 21.5, $text
+			0, $y0 + 7.5, $text
 		);
 
 		$w = $pdf->getPos(W);

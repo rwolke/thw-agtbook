@@ -1,18 +1,22 @@
 <?php
-	return function($pdf) {
+	return function($pdf, $args = []) {
 
 		$pdf->CreatePage('P', true, true);
 		$xh = PAGE_WIDTH/2 + BLEED;
 		$y0 = $pdf->getPos(Y);
 		
-		$pdf->Img(
-			'cover/IMG_2788.jpg', 
-			0, 0, 
-			'H', PAGE_HEIGHT+2*BLEED,
-			24, 100,
-			41, 0
-		);
-
+		if(isset($args['coverimage']) && is_callable($args['coverimage']))
+			$args['coverimage']($pdf);
+		else {
+			$pdf->Img(
+				'cover/IMG_2788.jpg', 
+				0, 0, 
+				'H', PAGE_HEIGHT+2*BLEED,
+				24, 100,
+				41, 0
+			);
+		}
+		
 		$pdf->SetAlpha(.7);
 		$pdf->SetFillColor(100);
 		$pdf->Rect(0, 0, BLEED+PAGE_WIDTH/2, BLEED + MARGIN_OUTER + 13, 'F');

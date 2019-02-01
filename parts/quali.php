@@ -14,7 +14,7 @@
 		
 		$text = 'Weiterbildungen und Fortbildungen des Atemschutzgeräteträgers für weitere Gerätearten und Schutzausstattungen, z. B. für Regenerationsgeräte, Körperschutz Form 3 oder Weiterqualifikation zum Atemschutzgerätewart bzw. Ausbilder.';
 		$pdf->putMultiText(
-			0, 21.5, $text
+			0, $y0 + 7.5, $text
 		);
 		
 		$w = $pdf->getPos(W);
